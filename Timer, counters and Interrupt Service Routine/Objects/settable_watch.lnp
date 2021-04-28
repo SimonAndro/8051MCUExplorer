@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\day_prac_settable_clock.obj" 
+TO ".\Objects\settable_watch" 
+PRINT(".\Listings\settable_watch.m51") RAMSIZE(256) 

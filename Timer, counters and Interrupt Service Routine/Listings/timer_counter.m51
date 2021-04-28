@@ -1,0 +1,189 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    07/21/2020  15:26:26  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+F:\KEIL\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\timer_isr.obj TO .\Objects\timer_counter PRINT (.\Listings\tim
+>> er_counter.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\timer_isr.obj (TIMER_ISR)
+  F:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\timer_counter (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?TIMER_ISR
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0005H     UNIT         ?PR?SETUP_INTERR?TIMER_ISR
+                    0008H     0003H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     0058H     UNIT         ?PR?TIMER_0_ISR?TIMER_ISR
+            CODE    00F2H     001DH     UNIT         ?PR?_DELAY?TIMER_ISR
+            CODE    010FH     000CH     UNIT         ?PR?TIMER0_INIT?TIMER_ISR
+            CODE    011BH     000AH     UNIT         ?PR?MAIN?TIMER_ISR
+            CODE    0125H     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\timer_counter (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?TIMER_ISR
+  +--> ?C_INITSEG
+
+?PR?MAIN?TIMER_ISR
+  +--> ?PR?TIMER0_INIT?TIMER_ISR
+  +--> ?PR?SETUP_INTERR?TIMER_ISR
+
+*** NEW ROOT ***************************************************
+
+?PR?TIMER_0_ISR?TIMER_ISR
+  +--> ?PR?_DELAY?TIMER_ISR
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/21/2020  15:26:26  PAGE 2
+
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\timer_counter (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:000EH         SEGMENT       ?C_C51STARTUP
+  I:0009H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0011H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:000EH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:000EH         LINE#         133
+  C:0010H         LINE#         134
+  C:0011H         LINE#         135
+  C:0012H         LINE#         136
+  C:0014H         LINE#         185
+  C:0017H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        TIMER_ISR
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  C:009AH         PUBLIC        timer_0_ISR
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  C:00F2H         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  B:0080H.7       PUBLIC        buzzer
+  C:011BH         PUBLIC        main
+  D:0008H         PUBLIC        count
+  C:0003H         PUBLIC        setup_interr
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/21/2020  15:26:26  PAGE 3
+
+
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  C:010FH         PUBLIC        timer0_init
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:011BH         LINE#         12
+  C:011BH         LINE#         13
+  C:011BH         LINE#         14
+  C:011DH         LINE#         15
+  C:0120H         LINE#         16
+  C:0123H         LINE#         17
+  C:0123H         LINE#         18
+  -------         ENDPROC       MAIN
+  -------         PROC          TIMER0_INIT
+  C:010FH         LINE#         21
+  C:010FH         LINE#         22
+  C:010FH         LINE#         24
+  C:0112H         LINE#         26
+  C:0115H         LINE#         27
+  C:0118H         LINE#         29
+  C:011AH         LINE#         30
+  -------         ENDPROC       TIMER0_INIT
+  -------         PROC          SETUP_INTERR
+  C:0003H         LINE#         32
+  C:0003H         LINE#         33
+  C:0003H         LINE#         34
+  C:0005H         LINE#         35
+  C:0007H         LINE#         36
+  -------         ENDPROC       SETUP_INTERR
+  -------         PROC          TIMER_0_ISR
+  C:009AH         LINE#         37
+  C:00B7H         LINE#         40
+  C:00BAH         LINE#         41
+  C:00BDH         LINE#         43
+  C:00BFH         LINE#         44
+  C:00CCH         LINE#         45
+  C:00CCH         LINE#         47
+  C:00CEH         LINE#         48
+  C:00D0H         LINE#         49
+  C:00D5H         LINE#         50
+  C:00D7H         LINE#         52
+  C:00D7H         LINE#         53
+  -------         ENDPROC       TIMER_0_ISR
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        x
+  -------         DO            
+  D:0006H         SYMBOL        y
+  -------         ENDDO         
+  C:00F2H         LINE#         54
+  C:00F2H         LINE#         55
+  C:00F2H         LINE#         57
+  C:00F8H         LINE#         58
+  C:010EH         LINE#         59
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/21/2020  15:26:26  PAGE 4
+
+
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        TIMER_ISR
+
+Program Size: data=10.0 xdata=0 code=294
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

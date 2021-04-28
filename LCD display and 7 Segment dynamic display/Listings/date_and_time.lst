@@ -1,0 +1,158 @@
+C51 COMPILER V9.60.0.0   DATE_AND_TIME                                                     07/19/2020 01:49:31 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DATE_AND_TIME
+OBJECT MODULE PLACED IN .\Objects\date_and_time.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE date_and_time.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\date_and_time.lst) TABS(2) OBJECT(.\Objects\date_and_time.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<string.h>
+   3          
+   4          sbit rs = P2^3; // register select
+   5          sbit rw = P2^4; // read/write
+   6          sbit en = P2^5; // read/write enable
+   7          
+   8          char seconds = 0;
+   9          char minutes = 0;
+  10          char hours = 0;
+  11          
+  12          char yourdata1[] ={"2020/7/19"};
+  13          char yourdata2[] ={" 00:00:00"};
+  14            
+  15          void lcd_init(); // lcd initialization
+  16          void write_com(char com); //write command
+  17          void write_data(char _data); // write data
+  18          
+  19          void delay(char x);// delay function
+  20          void main()
+  21          {
+  22   1          char i;
+  23   1          lcd_init();
+  24   1          delay(20);
+  25   1        
+  26   1          //first information
+  27   1          //display on line 1
+  28   1          write_com(0x80+4);
+  29   1          delay(10);
+  30   1          
+  31   1          for(i =0; i<strlen(yourdata1); i++)
+  32   1          {
+  33   2            write_data(yourdata1[i]);
+  34   2            delay(10);
+  35   2          }
+  36   1          //display on line 2
+  37   1          write_com(0xc0+4);
+  38   1          delay(10);
+  39   1          
+  40   1          for(i =0; i<strlen(yourdata2); i++)
+  41   1          {
+  42   2            write_data(yourdata2[i]);
+  43   2            delay(10);
+  44   2          }
+  45   1        
+  46   1      
+  47   1        
+  48   1        while(1)
+  49   1        {
+  50   2          delay(250);
+  51   2        
+  52   2          seconds++;
+  53   2          write_com(0xc0+11);
+  54   2          write_data(seconds/10+48); //tens
+C51 COMPILER V9.60.0.0   DATE_AND_TIME                                                     07/19/2020 01:49:31 PAGE 2   
+
+  55   2          
+  56   2          write_com(0xc0+12);
+  57   2          write_data(seconds%10+48); //ones
+  58   2          
+  59   2          if(seconds>=4)
+  60   2          {
+  61   3            seconds = 0;
+  62   3            minutes++;
+  63   3            write_com(0xc0+8);
+  64   3            write_data(minutes/10+48); //tens
+  65   3            
+  66   3            write_com(0xc0+9);
+  67   3            write_data(minutes%10+48); //ones
+  68   3          }
+  69   2          
+  70   2          if(minutes>=4)
+  71   2          {
+  72   3            minutes = 0;
+  73   3            hours++;
+  74   3            write_com(0xc0+5);
+  75   3            write_data(hours/10+48); //tens
+  76   3            
+  77   3            write_com(0xc0+6);
+  78   3            write_data(hours%10+48); //ones
+  79   3          }
+  80   2          
+  81   2          if(hours>=4)
+  82   2          {
+  83   3            minutes = 0;
+  84   3            hours   = 0;
+  85   3            seconds = 0;
+  86   3          }
+  87   2        
+  88   2        }
+  89   1      }
+  90          
+  91          void lcd_init() // lcd initialization
+  92          {
+  93   1          // prepare the screen ->16*2 cells, 5*7 matrix for each cell
+  94   1          write_com(0x38);
+  95   1          // turn on display
+  96   1          write_com(0x08);
+  97   1          // clear the screen
+  98   1          write_com(1);
+  99   1          // prepare cursor and data pointer
+ 100   1          write_com(6);
+ 101   1          // cursor setup
+ 102   1          write_com(0x0c);
+ 103   1          
+ 104   1      }
+ 105          void write_com(char com) //write command
+ 106          {
+ 107   1        rs = 0; rw =0; P0 = com;
+ 108   1        en = 0;
+ 109   1        delay(10);
+ 110   1        en = 1;
+ 111   1        delay(10);
+ 112   1        en = 0;
+ 113   1      }
+ 114          void write_data(char _data) // write data
+ 115          {
+ 116   1        rs = 1;  rw = 0; P0 = _data;
+C51 COMPILER V9.60.0.0   DATE_AND_TIME                                                     07/19/2020 01:49:31 PAGE 3   
+
+ 117   1        en = 0;
+ 118   1        delay(10);
+ 119   1        en = 1;
+ 120   1        delay(10);
+ 121   1        en = 0;
+ 122   1        
+ 123   1      }
+ 124          
+ 125          void delay(char x)// delay function
+ 126          {
+ 127   1        char y;
+ 128   1        while(x--)
+ 129   1          for(y =0; y<120; y++);
+ 130   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    393    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     23       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

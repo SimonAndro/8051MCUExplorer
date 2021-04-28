@@ -1,0 +1,128 @@
+C51 COMPILER V9.60.0.0   DIGITAL_ANALOG_CONVERTOR_DEBUGGED                                 07/22/2020 00:07:10 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DIGITAL_ANALOG_CONVERTOR_DEBUGGED
+OBJECT MODULE PLACED IN .\Objects\digital_analog_convertor_debugged.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE digital_analog_convertor_debugged.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEX
+                    -TEND PRINT(.\Listings\digital_analog_convertor_debugged.lst) TABS(2) OBJECT(.\Objects\digital_analog_convertor_debugged.
+                    -obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          sbit Scl = P2^1;
+   4          sbit Sda = P2^0;
+   5          
+   6          void icc_start();
+   7          void icc_send(char _data);
+   8          void icc_ack(); 
+   9          void icc_stop();
+  10          void DAC(char _byte); 
+  11          
+  12          void delay(char x);// delay function
+  13            
+  14          void main()
+  15          {
+  16   1        int num = 0;
+  17   1         while(1)
+  18   1         {
+  19   2           DAC(num);
+  20   2           num++;
+  21   2           delay(10);
+  22   2           if(num==256)
+  23   2           {
+  24   3              num = 0;
+  25   3           }
+  26   2         }
+  27   1      }
+  28          void icc_start()
+  29          {
+  30   1        Scl = 1;
+  31   1        _nop_();
+  32   1        Sda = 1;
+  33   1        _nop_();
+  34   1        Sda = 0;
+  35   1      }
+  36          void icc_send(char _data)
+  37          {
+  38   1        char oneByte = 8;
+  39   1        char temp = 0x80; // 1000 0000
+  40   1        //1000 0000
+  41   1        //0XXX XXXX
+  42   1        //1XXX XXXX
+  43   1        
+  44   1        while(oneByte)
+  45   1        {
+  46   2          Scl = 0;
+  47   2          if((temp&_data)==0)
+  48   2          {
+  49   3            Sda = 0;
+  50   3          }
+  51   2          else
+  52   2          {
+  53   3            Sda = 1;
+C51 COMPILER V9.60.0.0   DIGITAL_ANALOG_CONVERTOR_DEBUGGED                                 07/22/2020 00:07:10 PAGE 2   
+
+  54   3          }
+  55   2          Scl = 0;
+  56   2          _nop_();
+  57   2          Scl = 1;
+  58   2          _nop_();  //added line 1
+  59   2          Scl = 0;  //added line 1
+  60   2          
+  61   2          _data = _data<<1;
+  62   2          oneByte--;
+  63   2        }
+  64   1        
+  65   1      }
+  66          void icc_ack()
+  67          {
+  68   1        //Sda = 0;
+  69   1        Scl = 0;
+  70   1        _nop_();
+  71   1        Scl = 1;
+  72   1        _nop_();
+  73   1        Scl = 0;
+  74   1      }
+  75          void icc_stop()
+  76          {
+  77   1        Scl = 1;
+  78   1        _nop_();
+  79   1        Sda = 0;
+  80   1        _nop_();
+  81   1        Sda = 1;
+  82   1      }
+  83          
+  84          void DAC(char _byte)
+  85          {
+  86   1        icc_start();
+  87   1        icc_send(0x90); // write to D/A convertor
+  88   1        icc_ack();
+  89   1        icc_send(0x40); //enable analog out
+  90   1        icc_ack();
+  91   1        icc_send(_byte); // send data
+  92   1        icc_ack();
+  93   1        icc_stop();
+  94   1      } 
+  95            
+  96          void delay(char x)// delay function
+  97          {
+  98   1        char y;
+  99   1        while(x--)
+ 100   1          for(y =0; y<120; y++);
+ 101   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    155    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

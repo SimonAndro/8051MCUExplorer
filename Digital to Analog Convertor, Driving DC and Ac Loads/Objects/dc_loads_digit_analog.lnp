@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\digital_analog_convertor.obj" 
+TO ".\Objects\dc_loads_digit_analog" 
+PRINT(".\Listings\dc_loads_digit_analog.m51") RAMSIZE(256) 

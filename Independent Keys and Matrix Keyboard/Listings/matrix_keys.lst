@@ -1,0 +1,90 @@
+C51 COMPILER V9.60.0.0   MATRIX_KEYS                                                       07/20/2020 13:21:55 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MATRIX_KEYS
+OBJECT MODULE PLACED IN .\Objects\matrix_keys.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE matrix_keys.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -matrix_keys.lst) TABS(2) OBJECT(.\Objects\matrix_keys.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          sbit selectionLatch = P2^7;
+   4          sbit dataLatch = P2^6;
+   5          char reference; 
+   6          void seg_display(char hex);
+   7          void delay(char x); // delay function
+   8          void main()
+   9          {
+  10   1        char keyCol;
+  11   1        char keyRow;
+  12   1        reference = 0xf0;
+  13   1        P3 = reference;
+  14   1        while(1)
+  15   1        {
+  16   2          P3 = reference;
+  17   2          if(P3!=reference) // key has been pressed
+  18   2          {
+  19   3              //debounce key
+  20   3              delay(50);
+  21   3            if(P3!=reference) //indeed key has been pressed
+  22   3            {
+  23   4              
+  24   4              keyCol = P3;
+  25   4              P3 = ~reference;
+  26   4              keyRow = P3;
+  27   4              
+  28   4              switch(keyCol|keyRow)
+  29   4              {
+  30   5                case 0xee:
+  31   5                  seg_display(0x06);
+  32   5                  break;
+  33   5                case 0xd7:
+  34   5                  seg_display(0x5e);
+  35   5                  break;
+  36   5                default:
+  37   5                  break;
+  38   5              }
+  39   4              
+  40   4            }
+  41   3          }
+  42   2            
+  43   2            
+  44   2            
+  45   2        
+  46   2        }
+  47   1      }
+  48          void seg_display(char hex)
+  49          {
+  50   1        P0 = 0;
+  51   1        selectionLatch = 1;
+  52   1        selectionLatch = 0;
+  53   1        
+  54   1        P0 = hex; //1--> 0x06,
+C51 COMPILER V9.60.0.0   MATRIX_KEYS                                                       07/20/2020 13:21:55 PAGE 2   
+
+  55   1        dataLatch = 1;
+  56   1        dataLatch = 0;
+  57   1      
+  58   1      }
+  59          void delay(char x) // delay function
+  60          {
+  61   1        char y;
+  62   1        while(x--)
+  63   1          for(y=0; y<120; y++);
+  64   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    102    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

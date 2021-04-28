@@ -1,0 +1,109 @@
+C51 COMPILER V9.60.0.0   PULSE_WIDTH_MODULATION                                            07/23/2020 03:13:55 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PULSE_WIDTH_MODULATION
+OBJECT MODULE PLACED IN .\Objects\pulse_width_modulation.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE pulse_width_modulation.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\pulse_width_modulation.lst) TABS(2) OBJECT(.\Objects\pulse_width_modulation.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          
+   4          sbit dc_motor = P1^0; 
+   5          sbit motor_switch = P3^4;
+   6          sbit speedUp = P3^6;
+   7          sbit speedDown = P3^7;
+   8          
+   9          unsigned char dutyCyle = 0;
+  10          unsigned char period = 10;
+  11          
+  12          void delay(unsigned char x);// delay function
+  13            
+  14          void main()
+  15          {
+  16   1        bit onFlag = 1;
+  17   1         while(1)
+  18   1         {
+  19   2           if(onFlag)
+  20   2           {
+  21   3              P1 = 0x00;
+  22   3              //dc_motor=1;
+  23   3              delay(period*(dutyCyle/100));
+  24   3              //dc_motor=0;
+  25   3              P1 = 0xff;
+  26   3              delay(period*((100-dutyCyle)/100));
+  27   3           }
+  28   2           
+  29   2            if(motor_switch==0)
+  30   2            {
+  31   3              delay(20);
+  32   3              if(motor_switch==0)
+  33   3              {
+  34   4                while(motor_switch==0);
+  35   4                //dc_motor = ~dc_motor;
+  36   4                  onFlag = ~onFlag ;
+  37   4              }
+  38   3            }
+  39   2            
+  40   2            // speed up the motor
+  41   2            if(speedUp==0)
+  42   2            {
+  43   3              delay(20);
+  44   3              if(speedUp==0)
+  45   3              {
+  46   4                //dc_motor=1;
+  47   4                while(speedUp==0);
+  48   4                
+  49   4                dutyCyle = dutyCyle<=10?(dutyCyle + 1):10;
+  50   4                
+  51   4              }
+  52   3            }
+  53   2            
+  54   2            // speed down the motor
+C51 COMPILER V9.60.0.0   PULSE_WIDTH_MODULATION                                            07/23/2020 03:13:55 PAGE 2   
+
+  55   2            if(speedDown==0)
+  56   2            {
+  57   3              delay(20);
+  58   3              if(speedDown==0)
+  59   3              {
+  60   4                //dc_motor=1;
+  61   4                while(speedDown==0);
+  62   4                
+  63   4                if(dutyCyle>0)
+  64   4                {
+  65   5                  dutyCyle = dutyCyle-1;
+  66   5                }
+  67   4                
+  68   4                
+  69   4              }
+  70   3            }
+  71   2            
+  72   2            
+  73   2         }
+  74   1      }
+  75          
+  76          
+  77          void delay(unsigned char x)// delay function
+  78          {
+  79   1        char y;
+  80   1        while(x--)
+  81   1          for(y =0; y<120; y++);
+  82   1      
+  83   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    161    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

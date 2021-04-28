@@ -1,0 +1,218 @@
+C51 COMPILER V9.60.0.0   DAY_PRAC_SETTABLE_CLOCK                                           07/20/2020 23:14:16 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DAY_PRAC_SETTABLE_CLOCK
+OBJECT MODULE PLACED IN .\Objects\day_prac_settable_clock.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE day_prac_settable_clock.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\Listings\day_prac_settable_clock.lst) TABS(2) OBJECT(.\Objects\day_prac_settable_clock.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<string.h>
+   3          
+   4          sbit rs = P2^3; // register select
+   5          sbit rw = P2^4; // read/write
+   6          sbit en = P2^5; // read/write enable
+   7          
+   8          char seconds = 0;
+   9          char minutes = 0;
+  10          
+  11          char yourdata1[] ={"2020/7/19"};
+  12          char yourdata2[] ={"14:12:00 "};
+  13          
+  14          sbit move = P3^4;
+  15          sbit decrease = P3^5;
+  16          sbit increase = P3^6;
+  17          sbit setWatch = P3^7;
+  18          
+  19          void lcd_init(); // lcd initialization
+  20          void write_com(char com); //write command
+  21          void write_data(char _data); // write data
+  22          
+  23          void delay(char x);// delay function
+  24          void main()
+  25          {
+  26   1        char i;
+  27   1        char setWatchFlag = 0;
+  28   1        char position = 7;
+  29   1        lcd_init();
+  30   1        
+  31   1          //first information
+  32   1          //display on line 1
+  33   1          write_com(0x80);
+  34   1          delay(10);
+  35   1          
+  36   1          for(i =0; i<strlen(yourdata1); i++)
+  37   1          {
+  38   2            write_data(yourdata1[i]);
+  39   2            delay(10);
+  40   2          }
+  41   1          //display on line 2
+  42   1          write_com(0xc0);
+  43   1          delay(10);
+  44   1          
+  45   1          for(i =0; i<strlen(yourdata2); i++)
+  46   1          {
+  47   2            write_data(yourdata2[i]);
+  48   2            delay(10);
+  49   2          }
+  50   1        
+  51   1        while(1)
+  52   1        {
+  53   2          // setting the watch
+  54   2          if(setWatch==0)
+C51 COMPILER V9.60.0.0   DAY_PRAC_SETTABLE_CLOCK                                           07/20/2020 23:14:16 PAGE 2   
+
+  55   2          {
+  56   3            delay(20);
+  57   3            if(setWatch==0)
+  58   3            {
+  59   4              while(setWatch==0); // stay here until user releases the key
+  60   4              
+  61   4              if(setWatchFlag==1)
+  62   4              {
+  63   5                setWatchFlag = 0;
+  64   5                write_com(0x0e);  //stop blinking the cursor
+  65   5                write_com(0x0c);  // display on, cursor off
+  66   5                
+  67   5              }
+  68   4              else
+  69   4              {
+  70   5                setWatchFlag = 1;
+  71   5                write_com(0xc0+7);
+  72   5                write_com(0x0f);  // start blinking the cursor
+  73   5              }
+  74   4            }
+  75   3          }
+  76   2          // moving to seconds , minutes and hours
+  77   2          else if(move==0&&setWatchFlag==1)
+  78   2          {
+  79   3            delay(20);
+  80   3            if(move==0&&setWatchFlag==1)
+  81   3            {
+  82   4              while(move==0);
+  83   4              
+  84   4              position = position -3;
+  85   4              if(position<0)
+  86   4              {
+  87   5                position = 7;
+  88   5              }
+  89   4              write_com(0xc0+position);
+  90   4            }
+  91   3          }
+  92   2          //increasing seconds, minutes, hours
+  93   2          else if(increase==0&&setWatchFlag==1)
+  94   2          {
+  95   3            delay(20);
+  96   3            if(increase==0&&setWatchFlag==1)
+  97   3            {
+  98   4              while(increase==0);
+  99   4              
+ 100   4              if(position == 7)
+ 101   4              {
+ 102   5                //seconds
+ 103   5                seconds++;  
+ 104   5                seconds = seconds<60?seconds:0;
+ 105   5                write_com(0xc0+6);
+ 106   5                write_data(seconds/10+48);
+ 107   5                write_com(0xc0+7);
+ 108   5                write_data(seconds%10+48);
+ 109   5                //write_data(0xc0+7);
+ 110   5                delay(20); // delay abit;
+ 111   5                
+ 112   5              }
+ 113   4              
+ 114   4              //minutes
+ 115   4              else if(position == 4)
+ 116   4              {}
+C51 COMPILER V9.60.0.0   DAY_PRAC_SETTABLE_CLOCK                                           07/20/2020 23:14:16 PAGE 3   
+
+ 117   4            
+ 118   4              
+ 119   4              //hours
+ 120   4              else if(position == 1)
+ 121   4              {}
+ 122   4            }
+ 123   3          }
+ 124   2          P3 = 0xff; // reset the buttons
+ 125   2          if(setWatchFlag!=1)
+ 126   2          {
+ 127   3            delay(10);
+ 128   3            seconds++;
+ 129   3            if(seconds>12)
+ 130   3            {
+ 131   4              seconds =0;
+ 132   4              minutes++;
+ 133   4              write_com(0xc0+3);
+ 134   4              write_data(minutes/10+48);
+ 135   4              write_com(0xc0+4);
+ 136   4              write_data(minutes%10+48);
+ 137   4            }
+ 138   3            else
+ 139   3            {
+ 140   4              write_com(0xc0+6);
+ 141   4              write_data(seconds/10+48);
+ 142   4              write_com(0xc0+7);
+ 143   4              write_data(seconds%10+48);
+ 144   4            }
+ 145   3          }
+ 146   2        }
+ 147   1      }
+ 148          
+ 149          void lcd_init() // lcd initialization
+ 150          {
+ 151   1          // prepare the screen ->16*2 cells, 5*7 matrix for each cell
+ 152   1          write_com(0x38);
+ 153   1          // turn on display
+ 154   1          write_com(0x0c);
+ 155   1          // prepare cursor and data pointer
+ 156   1          write_com(6);
+ 157   1          // clear the screen
+ 158   1          write_com(1);
+ 159   1          
+ 160   1      }
+ 161          void write_com(char com) //write command
+ 162          {
+ 163   1        rs = 0; rw =0; P0 = com;
+ 164   1        en = 0;
+ 165   1        delay(10);
+ 166   1        en = 1;
+ 167   1        delay(10);
+ 168   1        en = 0;
+ 169   1        delay(10);  // delay abit
+ 170   1      }
+ 171          void write_data(char _data) // write data
+ 172          {
+ 173   1        rs = 1;  rw = 0; P0 = _data;
+ 174   1        en = 0;
+ 175   1        delay(10);
+ 176   1        en = 1;
+ 177   1        delay(10);
+ 178   1        en = 0;
+C51 COMPILER V9.60.0.0   DAY_PRAC_SETTABLE_CLOCK                                           07/20/2020 23:14:16 PAGE 4   
+
+ 179   1        delay(10);  // delay abit
+ 180   1        
+ 181   1      }
+ 182          
+ 183          void delay(char x)// delay function
+ 184          {
+ 185   1        char y;
+ 186   1        while(x--)
+ 187   1          for(y =0; y<120; y++);
+ 188   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    578    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

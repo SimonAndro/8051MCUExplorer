@@ -1,0 +1,155 @@
+C51 COMPILER V9.60.0.0   TIMER_INTERRUPT                                                   07/20/2020 23:27:41 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIMER_INTERRUPT
+OBJECT MODULE PLACED IN .\Objects\timer_interrupt.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE timer_interrupt.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\timer_interrupt.lst) TABS(2) OBJECT(.\Objects\timer_interrupt.obj)
+
+line level    source
+
+   1          
+   2          #include<reg52.h>
+   3          
+   4          sbit buzzer = P0^7;
+   5          sbit selectionLatch = P2^7;
+   6          sbit dataLatch = P2^6;
+   7          
+   8          char count =0;
+   9          char seconds = 0;
+  10          char minutes = 0;
+  11          
+  12          char code segData[] =    // 0 to 9 codes for segment display
+  13          {0x3f,0x06,0x5b,
+  14          0x4f,0x66,0x6d,
+  15          0x7d,0x07,0x7f,0x6f}; 
+  16          
+  17          char code segment[] =    // selection choice for one of the 6 display segments
+  18          {0xfe,0xfd,0xfb,
+  19          0xf7,0xef,0xdf};
+  20          
+  21          void seg_disp(char seconds,char minutes); // display to the 7 segment
+  22          void init_timer(); // timer initialization
+  23          void delay(char x);// delay function
+  24          
+  25          void main()
+  26          {
+  27   1        init_timer();
+  28   1        while(1)
+  29   1        {
+  30   2          //display onto the 7 segment display
+  31   2          seg_disp(seconds, minutes);
+  32   2        }
+  33   1      }
+  34          
+  35          
+  36          
+  37          void init_timer() // timer initialization
+  38          {
+  39   1        //TMOD
+  40   1          TMOD = 0x01; // timer 0 in timer mode 1
+  41   1        //initial value to the timer
+  42   1          TH0 = (65536-46082)/256;
+  43   1          TL0 = (65536-46082)%256;  
+  44   1        //TCON
+  45   1          TR0 = 1;
+  46   1        // setup interrupt
+  47   1        EA = 1;
+  48   1        ET0 = 1;
+  49   1        
+  50   1      } 
+  51          
+  52          void seg_disp(char seconds, char minutes) // display to the 7 segment
+  53          {
+  54   1            char tens, ones;
+C51 COMPILER V9.60.0.0   TIMER_INTERRUPT                                                   07/20/2020 23:27:41 PAGE 2   
+
+  55   1            char mtens, mones;
+  56   1            char t = 4; 
+  57   1        
+  58   1            tens = seconds/10;
+  59   1            ones = seconds%10;
+  60   1        
+  61   1            mtens = minutes/10;
+  62   1            mones = minutes%10;
+  63   1        
+  64   1            //seconds
+  65   1            P0 = segment[5];
+  66   1            selectionLatch = 1;
+  67   1            selectionLatch = 0;
+  68   1            
+  69   1            P0 = segData[ones]; 
+  70   1            dataLatch = 1;
+  71   1            dataLatch = 0;
+  72   1            delay(t);
+  73   1            P0 = segment[4];
+  74   1            selectionLatch = 1;
+  75   1            selectionLatch = 0;
+  76   1        
+  77   1            P0 = segData[tens]; 
+  78   1            dataLatch = 1;
+  79   1            dataLatch = 0;
+  80   1            delay(t);
+  81   1            // minutes
+  82   1            P0 = segment[3];
+  83   1            selectionLatch = 1;
+  84   1            selectionLatch = 0;
+  85   1            
+  86   1            P0 = segData[mones]; 
+  87   1            dataLatch = 1;
+  88   1            dataLatch = 0;
+  89   1            delay(t);
+  90   1            P0 = segment[2];
+  91   1            selectionLatch = 1;
+  92   1            selectionLatch = 0;
+  93   1        
+  94   1            P0 = segData[mtens]; 
+  95   1            dataLatch = 1;
+  96   1            dataLatch = 0;
+  97   1            delay(t);
+  98   1      }
+  99          void delay(char x)// delay function
+ 100          {
+ 101   1        char y;
+ 102   1        while(x--)
+ 103   1          for(y =0; y<120; y++);
+ 104   1      }
+ 105          
+ 106          void timer_0_interrupt() interrupt 1
+ 107          {
+ 108   1            // reload timer
+ 109   1            TH0 = (65536-46082)/256;
+ 110   1            TL0 = (65536-46082)%256;
+ 111   1            //count time
+ 112   1            count++;
+ 113   1            if(count>=20)
+ 114   1            {
+ 115   2              buzzer = 1;
+ 116   2              delay(10);
+C51 COMPILER V9.60.0.0   TIMER_INTERRUPT                                                   07/20/2020 23:27:41 PAGE 3   
+
+ 117   2              buzzer = 0;
+ 118   2              count = 0;
+ 119   2              
+ 120   2              seconds++;
+ 121   2              if(seconds>59)
+ 122   2              {
+ 123   3                  minutes++;
+ 124   3                  seconds = 0;
+ 125   3              }
+ 126   2            }
+ 127   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    300    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\pulse_width_modulation.obj" 
+TO ".\Objects\pulse_width_mod_analo_dig_conv" 
+PRINT(".\Listings\pulse_width_mod_analo_dig_conv.m51") RAMSIZE(256) 

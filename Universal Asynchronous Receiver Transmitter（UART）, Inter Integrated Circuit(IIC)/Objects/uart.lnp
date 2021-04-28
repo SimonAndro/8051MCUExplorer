@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\uart_recv_polling.obj" 
+TO ".\Objects\uart" 
+PRINT(".\Listings\uart.m51") RAMSIZE(256) 

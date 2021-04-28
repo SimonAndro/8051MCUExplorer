@@ -1,0 +1,71 @@
+C51 COMPILER V9.60.0.0   UART_RECV_POLLING                                                 10/25/2020 19:30:20 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART_RECV_POLLING
+OBJECT MODULE PLACED IN .\Objects\uart_recv_polling.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE uart_recv_polling.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\uart_recv_polling.lst) TABS(2) OBJECT(.\Objects\uart_recv_polling.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<string.h>
+   3          #include "lcd_interface.c"
+   4          
+   5          #define uchar unsigned char
+   6            
+   7          char myMSG[] = {"The world is a beautiful place\n"}; 
+   8          
+   9          void uart_init();
+  10          char uart_RX(); // receive data
+  11          
+  12          
+  13          void main()
+  14          {
+  15   1        char i = 0;
+  16   1        uart_init();
+  17   1        lcd_init();
+  18   1        while(1)
+  19   1        {
+  20   2          
+  21   2            write_data(uart_RX());
+  22   2            RI = 0;
+  23   2          
+  24   2          delay(10);
+  25   2        }
+  26   1      }
+  27          
+  28          
+  29          void uart_init()
+  30          {
+  31   1        // initialize timer 1 in mode 2(8 bit auto reload)
+  32   1        TMOD = 0x20;
+  33   1        TH1 = 0xfd;
+  34   1        SCON = 0x50;
+  35   1        TR1 = 1;
+  36   1        RI =  0;
+  37   1      }
+  38          char uart_RX( )
+  39          {
+  40   1        char _data;
+  41   1        while(RI == 0);
+  42   1        _data = SBUF;
+  43   1        return _data;
+  44   1      
+  45   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    129    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     32       1
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   UART_RECV_POLLING                                                 10/25/2020 19:30:20 PAGE 2   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

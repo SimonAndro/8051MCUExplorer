@@ -1,0 +1,406 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    07/23/2020  15:35:32  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+F:\KEIL\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\heat_sensor_simulation.obj TO .\Objects\analog_digital PRINT (
+>> .\Listings\analog_digital.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\heat_sensor_simulation.obj (HEAT_SENSOR_SIMULATION)
+  F:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\analog_digital (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0006H     UNIT         _DATA_GROUP_
+            DATA    000EH     0001H     UNIT         ?DT?HEAT_SENSOR_SIMULATION
+                    000FH     0011H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     0077H     UNIT         ?PR?_SEG_DISP?HEAT_SENSOR_SIMULATION
+            CODE    0106H     003AH     UNIT         ?PR?MAIN?HEAT_SENSOR_SIMULATION
+            CODE    0140H     0021H     UNIT         ?PR?_ADC?HEAT_SENSOR_SIMULATION
+            CODE    0161H     001FH     UNIT         ?PR?_IIC_SEND?HEAT_SENSOR_SIMULATION
+            CODE    0180H     001DH     UNIT         ?PR?IIC_READ?HEAT_SENSOR_SIMULATION
+            CODE    019DH     001DH     UNIT         ?PR?_DELAY?HEAT_SENSOR_SIMULATION
+            CODE    01BAH     0016H     UNIT         ?PR?_MYDAC?HEAT_SENSOR_SIMULATION
+            CODE    01D0H     0015H     UNIT         ?PR?IIC_ACK?HEAT_SENSOR_SIMULATION
+            CODE    01E5H     0014H     UNIT         ?PR?WARNING_ALARM?HEAT_SENSOR_SIMULATION
+            CODE    01F9H     0010H     UNIT         ?CO?HEAT_SENSOR_SIMULATION
+            CODE    0209H     000BH     UNIT         ?PR?IIC_NOACK?HEAT_SENSOR_SIMULATION
+            CODE    0214H     0009H     UNIT         ?PR?IIC_START?HEAT_SENSOR_SIMULATION
+            CODE    021DH     0009H     UNIT         ?PR?IIC_STOP?HEAT_SENSOR_SIMULATION
+            CODE    0226H     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\analog_digital (?C_STARTUP)
+
+
+SEGMENT                                             BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT                            START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----      -----    -----
+  +--> ?PR?MAIN?HEAT_SENSOR_SIMULATION
+  +--> ?C_INITSEG
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/23/2020  15:35:32  PAGE 2
+
+
+
+?PR?MAIN?HEAT_SENSOR_SIMULATION                  0020H.0  0000H.1    0008H    0004H
+  +--> ?PR?_ADC?HEAT_SENSOR_SIMULATION
+  +--> ?PR?_SEG_DISP?HEAT_SENSOR_SIMULATION
+
+?PR?_ADC?HEAT_SENSOR_SIMULATION                  -----    -----      -----    -----
+  +--> ?PR?IIC_ACK?HEAT_SENSOR_SIMULATION
+  +--> ?PR?_IIC_SEND?HEAT_SENSOR_SIMULATION
+  +--> ?PR?IIC_START?HEAT_SENSOR_SIMULATION
+  +--> ?PR?IIC_READ?HEAT_SENSOR_SIMULATION
+  +--> ?PR?IIC_NOACK?HEAT_SENSOR_SIMULATION
+  +--> ?PR?IIC_STOP?HEAT_SENSOR_SIMULATION
+
+?PR?IIC_ACK?HEAT_SENSOR_SIMULATION               -----    -----      -----    -----
+  +--> ?PR?IIC_START?HEAT_SENSOR_SIMULATION
+  +--> ?PR?_IIC_SEND?HEAT_SENSOR_SIMULATION
+
+?PR?_SEG_DISP?HEAT_SENSOR_SIMULATION             -----    -----      000CH    0002H
+  +--> ?CO?HEAT_SENSOR_SIMULATION
+  +--> ?PR?_DELAY?HEAT_SENSOR_SIMULATION
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\analog_digital (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0003H         SEGMENT       ?C_C51STARTUP
+  I:0021H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0006H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0003H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0003H         LINE#         133
+  C:0005H         LINE#         134
+  C:0006H         LINE#         135
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/23/2020  15:35:32  PAGE 3
+
+
+  C:0007H         LINE#         136
+  C:0009H         LINE#         185
+  C:000CH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        HEAT_SENSOR_SIMULATION
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:0209H         PUBLIC        iic_noAck
+  B:00A0H.6       PUBLIC        dataLatch
+  D:00A8H         PUBLIC        IE
+  C:019DH         PUBLIC        _delay
+  B:00A0H.0       PUBLIC        Sda
+  D:00B8H         PUBLIC        IP
+  B:00A0H.1       PUBLIC        Scl
+  B:0080H.0       PUBLIC        buzzer
+  C:0106H         PUBLIC        main
+  C:01BAH         PUBLIC        _myDAC
+  D:0098H         PUBLIC        SCON
+  C:0180H         PUBLIC        iic_read
+  D:0088H         PUBLIC        TCON
+  D:000EH         PUBLIC        lowerThres
+  B:00A0H.7       PUBLIC        selectionLatch
+  C:01F9H         PUBLIC        segData
+  C:0161H         PUBLIC        _iic_send
+  C:01DAH         PUBLIC        iic_ack
+  C:0140H         PUBLIC        _ADC
+  C:0214H         PUBLIC        iic_start
+  C:008FH         PUBLIC        _seg_disp
+  C:021DH         PUBLIC        iic_stop
+  D:00C8H         PUBLIC        T2CON
+  C:01E5H         PUBLIC        warning_alarm
+  C:0203H         PUBLIC        segment
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        num
+  D:0009H         SYMBOL        flag
+  D:000AH         SYMBOL        count
+  D:000BH         SYMBOL        channel
+  B:0020H.0       SYMBOL        alarmFlag
+  -------         ENDDO         
+  C:0106H         LINE#         38
+  C:0106H         LINE#         39
+  C:0106H         LINE#         40
+  C:0109H         LINE#         41
+  C:010BH         LINE#         42
+  C:010DH         LINE#         43
+  C:010FH         LINE#         44
+  C:0111H         LINE#         46
+  C:0113H         LINE#         47
+  C:011AH         LINE#         51
+  C:011AH         LINE#         52
+  C:011AH         LINE#         53
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/23/2020  15:35:32  PAGE 4
+
+
+  C:011AH         LINE#         54
+  C:011AH         LINE#         56
+  C:011AH         LINE#         57
+  C:011CH         LINE#         58
+  C:0127H         LINE#         59
+  C:0127H         LINE#         60
+  C:012EH         LINE#         68
+  C:0135H         LINE#         69
+  C:0135H         LINE#         71
+  C:0137H         LINE#         72
+  C:0137H         LINE#         73
+  C:0137H         LINE#         75
+  C:013EH         LINE#         76
+  -------         ENDPROC       MAIN
+  -------         PROC          IIC_START
+  C:0214H         LINE#         78
+  C:0214H         LINE#         79
+  C:0214H         LINE#         81
+  C:0216H         LINE#         82
+  C:0217H         LINE#         83
+  C:0219H         LINE#         84
+  C:021AH         LINE#         85
+  C:021CH         LINE#         87
+  -------         ENDPROC       IIC_START
+  -------         PROC          _IIC_SEND
+  D:0007H         SYMBOL        _data
+  -------         DO            
+  D:0006H         SYMBOL        oneByte
+  D:0005H         SYMBOL        temp
+  -------         ENDDO         
+  C:0161H         LINE#         88
+  C:0161H         LINE#         89
+  C:0161H         LINE#         90
+  C:0163H         LINE#         91
+  C:0165H         LINE#         96
+  C:0165H         LINE#         97
+  C:0165H         LINE#         98
+  C:0167H         LINE#         99
+  C:016BH         LINE#         101
+  C:016BH         LINE#         102
+  C:016DH         LINE#         103
+  C:016FH         LINE#         105
+  C:016FH         LINE#         106
+  C:0171H         LINE#         107
+  C:0171H         LINE#         108
+  C:0173H         LINE#         109
+  C:0174H         LINE#         110
+  C:0176H         LINE#         111
+  C:0177H         LINE#         112
+  C:0179H         LINE#         114
+  C:017DH         LINE#         115
+  C:017FH         LINE#         116
+  C:017FH         LINE#         118
+  -------         ENDPROC       _IIC_SEND
+  -------         PROC          IIC_READ
+  -------         DO            
+  D:0007H         SYMBOL        check
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/23/2020  15:35:32  PAGE 5
+
+
+  D:0006H         SYMBOL        read
+  D:0005H         SYMBOL        bitCount
+  -------         ENDDO         
+  C:0180H         LINE#         120
+  C:0180H         LINE#         121
+  C:0180H         LINE#         122
+  C:0182H         LINE#         123
+  C:0184H         LINE#         124
+  C:0186H         LINE#         126
+  C:0188H         LINE#         127
+  C:0188H         LINE#         128
+  C:0188H         LINE#         129
+  C:018AH         LINE#         130
+  C:018BH         LINE#         131
+  C:018DH         LINE#         132
+  C:018EH         LINE#         133
+  C:0191H         LINE#         134
+  C:0191H         LINE#         135
+  C:0194H         LINE#         136
+  C:0194H         LINE#         137
+  C:0198H         LINE#         138
+  C:019AH         LINE#         139
+  C:019AH         LINE#         140
+  C:019CH         LINE#         141
+  -------         ENDPROC       IIC_READ
+  -------         PROC          L?0030
+  -------         ENDPROC       L?0030
+  -------         PROC          IIC_ACK
+  C:01DAH         LINE#         143
+  C:01DAH         LINE#         144
+  C:01DAH         LINE#         145
+  C:01DCH         LINE#         146
+  C:01DEH         LINE#         147
+  C:01DFH         LINE#         148
+  C:01E1H         LINE#         149
+  C:01E2H         LINE#         150
+  C:01E4H         LINE#         152
+  -------         ENDPROC       IIC_ACK
+  -------         PROC          IIC_NOACK
+  C:0209H         LINE#         153
+  C:0209H         LINE#         154
+  C:0209H         LINE#         155
+  C:020BH         LINE#         156
+  C:020DH         LINE#         157
+  C:020EH         LINE#         158
+  C:0210H         LINE#         159
+  C:0211H         LINE#         160
+  C:0213H         LINE#         162
+  -------         ENDPROC       IIC_NOACK
+  -------         PROC          IIC_STOP
+  C:021DH         LINE#         163
+  C:021DH         LINE#         164
+  C:021DH         LINE#         165
+  C:021FH         LINE#         166
+  C:0220H         LINE#         167
+  C:0222H         LINE#         168
+  C:0223H         LINE#         169
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/23/2020  15:35:32  PAGE 6
+
+
+  C:0225H         LINE#         171
+  -------         ENDPROC       IIC_STOP
+  -------         PROC          _MYDAC
+  D:0004H         SYMBOL        _byte
+  C:01BAH         LINE#         173
+  C:01BAH         LINE#         174
+  C:01BAH         LINE#         175
+  C:01BAH         LINE#         176
+  C:01BAH         LINE#         177
+  C:01BDH         LINE#         178
+  C:01C2H         LINE#         179
+  C:01C5H         LINE#         180
+  C:01CAH         LINE#         181
+  C:01CDH         LINE#         182
+  -------         ENDPROC       _MYDAC
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        x
+  -------         DO            
+  D:0006H         SYMBOL        y
+  -------         ENDDO         
+  C:019DH         LINE#         187
+  C:019DH         LINE#         188
+  C:019DH         LINE#         190
+  C:01A3H         LINE#         191
+  C:01B9H         LINE#         192
+  -------         ENDPROC       _DELAY
+  -------         PROC          _SEG_DISP
+  D:0006H         SYMBOL        seconds
+  D:0005H         SYMBOL        minutes
+  -------         DO            
+  D:0002H         SYMBOL        tens
+  D:0007H         SYMBOL        ones
+  D:000CH         SYMBOL        mtens
+  D:000DH         SYMBOL        mones
+  D:0003H         SYMBOL        t
+  -------         ENDDO         
+  C:008FH         LINE#         195
+  C:0091H         LINE#         196
+  C:0091H         LINE#         199
+  C:0093H         LINE#         201
+  C:0099H         LINE#         202
+  C:00A5H         LINE#         204
+  C:00ACH         LINE#         205
+  C:00B4H         LINE#         208
+  C:00BBH         LINE#         209
+  C:00BDH         LINE#         210
+  C:00BFH         LINE#         212
+  C:00D2H         LINE#         213
+  C:00D4H         LINE#         214
+  C:00D6H         LINE#         215
+  C:00DBH         LINE#         216
+  C:00E2H         LINE#         217
+  C:00E4H         LINE#         218
+  C:00E6H         LINE#         220
+  C:00FDH         LINE#         221
+  C:00FFH         LINE#         222
+  C:0101H         LINE#         223
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/23/2020  15:35:32  PAGE 7
+
+
+  -------         ENDPROC       _SEG_DISP
+  -------         PROC          _ADC
+  D:0004H         SYMBOL        channel
+  -------         DO            
+  D:0007H         SYMBOL        readData
+  -------         ENDDO         
+  C:0140H         LINE#         245
+  C:0140H         LINE#         246
+  C:0140H         LINE#         248
+  C:0140H         LINE#         249
+  C:0140H         LINE#         250
+  C:0143H         LINE#         251
+  C:014AH         LINE#         252
+  C:014DH         LINE#         254
+  C:0150H         LINE#         255
+  C:0155H         LINE#         256
+  C:0158H         LINE#         257
+  C:015BH         LINE#         258
+  C:015EH         LINE#         259
+  -------         ENDPROC       _ADC
+  -------         PROC          WARNING_ALARM
+  -------         DO            
+  D:0003H         SYMBOL        t
+  -------         ENDDO         
+  C:01E5H         LINE#         263
+  C:01E5H         LINE#         264
+  C:01E5H         LINE#         265
+  C:01E7H         LINE#         267
+  C:01E9H         LINE#         268
+  C:01F2H         LINE#         269
+  C:01F4H         LINE#         270
+  -------         ENDPROC       WARNING_ALARM
+  -------         ENDMOD        HEAT_SENSOR_SIMULATION
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MYDAC?HEAT_SENSOR_SIMULATION
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?WARNING_ALARM?HEAT_SENSOR_SIMULATION
+
+Program Size: data=16.1 xdata=0 code=554
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\heat_sensor_simulation.obj" 
+TO ".\Objects\analog_digital" 
+PRINT(".\Listings\analog_digital.m51") RAMSIZE(256) 

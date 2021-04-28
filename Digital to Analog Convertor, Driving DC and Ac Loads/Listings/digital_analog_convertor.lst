@@ -1,0 +1,146 @@
+C51 COMPILER V9.60.0.0   DIGITAL_ANALOG_CONVERTOR                                          07/22/2020 14:59:43 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DIGITAL_ANALOG_CONVERTOR
+OBJECT MODULE PLACED IN .\Objects\digital_analog_convertor.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE digital_analog_convertor.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRIN
+                    -T(.\Listings\digital_analog_convertor.lst) TABS(2) OBJECT(.\Objects\digital_analog_convertor.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          sbit Scl = P2^1;
+   4          sbit Sda = P2^0;
+   5          
+   6          void icc_start();
+   7          void icc_send(char _data);
+   8          void icc_ack(); 
+   9          void icc_stop();
+  10          void DAC(char _byte); 
+  11          
+  12          void delay(char x);// delay function
+  13            
+  14          void main()
+  15          {
+  16   1        int num = 0;
+  17   1        char flag = 0;
+  18   1        
+  19   1        DAC(128); // 
+  20   1        
+  21   1        while(1)
+  22   1        {
+  23   2          //DAC(num); //255->1111 1111
+  24   2          
+  25   2          if(num>=255)
+  26   2          {
+  27   3            flag = 1;
+  28   3          }
+  29   2          if(num<=0)
+  30   2          {
+  31   3            flag = 0;
+  32   3          }
+  33   2          
+  34   2          if(flag==1)
+  35   2          {
+  36   3            num--;
+  37   3          }else
+  38   2          {
+  39   3            num++;
+  40   3          }
+  41   2          delay(10);
+  42   2        }
+  43   1      }
+  44          void icc_start()
+  45          {
+  46   1        Scl = 1;
+  47   1        _nop_();
+  48   1        Sda = 1;
+  49   1        _nop_();
+  50   1        Sda = 0;
+  51   1      }
+  52          void icc_send(char _data)
+  53          {
+  54   1        char oneByte = 8;
+C51 COMPILER V9.60.0.0   DIGITAL_ANALOG_CONVERTOR                                          07/22/2020 14:59:43 PAGE 2   
+
+  55   1        char temp = 0x80; // 1000 0000
+  56   1        //1000 0000
+  57   1        //0XXX XXXX
+  58   1        //1XXX XXXX
+  59   1        
+  60   1        while(oneByte)
+  61   1        {
+  62   2          Scl = 0;   // added new line 1
+  63   2          if((temp&_data)==0)
+  64   2          //if(temp&_data==0) // changed this line 
+  65   2          {
+  66   3            Sda = 0;
+  67   3          }
+  68   2          else
+  69   2          {
+  70   3            Sda = 1;
+  71   3          }
+  72   2          Scl = 0;
+  73   2          _nop_();
+  74   2          Scl = 1;
+  75   2          _nop_();  // added new line 2
+  76   2          Scl = 0;  // added new line 3
+  77   2          
+  78   2          _data = _data<<1;
+  79   2          oneByte--;
+  80   2        }
+  81   1        
+  82   1      }
+  83          void icc_ack()
+  84          {
+  85   1        Sda = 0;
+  86   1        Scl = 0;
+  87   1        _nop_();
+  88   1        Scl = 1;
+  89   1        _nop_();
+  90   1        Scl = 0;
+  91   1      }
+  92          void icc_stop()
+  93          {
+  94   1        Scl = 1;
+  95   1        _nop_();
+  96   1        Sda = 0;
+  97   1        _nop_();
+  98   1        Sda = 1;
+  99   1      }
+ 100          
+ 101          void DAC(char _byte)
+ 102          {
+ 103   1        icc_start();
+ 104   1        icc_send(0x90); // write to D/A convertor
+ 105   1        icc_ack();
+ 106   1        icc_send(0x40); //enable analog out
+ 107   1        icc_ack();
+ 108   1        icc_send(_byte); // send data
+ 109   1        icc_ack();
+ 110   1        icc_stop();
+ 111   1      } 
+ 112            
+ 113          void delay(char x)// delay function
+ 114          {
+ 115   1        char y;
+ 116   1        while(x--)
+C51 COMPILER V9.60.0.0   DIGITAL_ANALOG_CONVERTOR                                          07/22/2020 14:59:43 PAGE 3   
+
+ 117   1          for(y =0; y<120; y++);
+ 118   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    200    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

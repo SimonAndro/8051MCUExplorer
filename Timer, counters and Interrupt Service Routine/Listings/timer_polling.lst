@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.0.0   TIMER_POLLING                                                     07/21/2020 15:15:36 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIMER_POLLING
+OBJECT MODULE PLACED IN .\Objects\timer_polling.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE timer_polling.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\timer_polling.lst) TABS(2) OBJECT(.\Objects\timer_polling.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          sbit buzzer = P0^7; 
+   4          char count = 0;
+   5          
+   6          void timer0_init(); // timer 0 initialization
+   7          
+   8          void timer0_poll(); // polling for timer 0
+   9          
+  10          void delay(char x);// delay function 
+  11            
+  12          void main()
+  13          {
+  14   1        buzzer = 0;
+  15   1        timer0_init();
+  16   1        while(1)
+  17   1        {
+  18   2          timer0_poll();
+  19   2        } 
+  20   1      }
+  21          
+  22          void timer0_init()
+  23          {
+  24   1        //Set the TMOD register
+  25   1        TMOD = 0x01; // timer 0 in timer mode 1
+  26   1        //initialize the timer
+  27   1        TH0 = (65536-46082)/256;
+  28   1        TL0 = (65536-46082)%256;
+  29   1        //start the timer
+  30   1        TR0 = 1; // start the timer
+  31   1      }
+  32          
+  33          void timer0_poll() // polling for timer 0
+  34          {
+  35   1        while(TF0==0);
+  36   1        TF0 = 0; // reset the overflow flag
+  37   1        // reload timer 0
+  38   1        TH0 = (65536-46082)/256;
+  39   1        TL0 = (65536-46082)%256;
+  40   1        
+  41   1        count++; // increament count
+  42   1        if(count==20)
+  43   1        {
+  44   2          //timer 0 has counted upto 1 second
+  45   2          count = 0;
+  46   2          buzzer = 1;
+  47   2          delay(10);
+  48   2          buzzer = 0; 
+  49   2          
+  50   2        }
+  51   1      }
+  52          
+  53          void delay(char x)// delay function
+  54          {
+C51 COMPILER V9.60.0.0   TIMER_POLLING                                                     07/21/2020 15:15:36 PAGE 2   
+
+  55   1        char y;
+  56   1        while(x--)
+  57   1          for(y =0; y<120; y++);
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     89    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

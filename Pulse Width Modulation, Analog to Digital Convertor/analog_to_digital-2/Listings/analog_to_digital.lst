@@ -1,0 +1,267 @@
+C51 COMPILER V9.60.0.0   ANALOG_TO_DIGITAL                                                 07/22/2020 23:26:12 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ANALOG_TO_DIGITAL
+OBJECT MODULE PLACED IN .\Objects\analog_to_digital.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE analog_to_digital.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\analog_to_digital.lst) TABS(2) OBJECT(.\Objects\analog_to_digital.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          
+   4          
+   5          sbit Scl = P2^1;
+   6          sbit Sda = P2^0;
+   7          sbit selectionLatch = P2^7;
+   8          sbit dataLatch = P2^6;
+   9          
+  10          unsigned char code segData[] =     // 0 to 9 codes for segment display
+  11          {0x3f,0x06,0x5b,
+  12          0x4f,0x66,0x6d,
+  13          0x7d,0x07,0x7f,0x6f}; 
+  14          
+  15          unsigned  char code segment[] =    // selection choice for one of the 6 display segments
+  16          {0xfe,0xfd,0xfb,
+  17          0xf7,0xef,0xdf};
+  18          
+  19          
+  20          void iic_start();     // start condition for data transmision on the IIC protocol           
+  21          void iic_send(unsigned char _data); // sending serial data using the IIC protocol
+  22          unsigned char iic_read();   // reading serial data using the IIC protocol
+  23          void iic_ack();     // acknowledge bit after sending a data byte
+  24          void iic_noAck();   // no acknowledge after receiving the last byte 
+  25          void iic_stop();    // stop condition after data transmision on the IIC protocol   
+  26          void myDAC(unsigned char _byte); // digital to analog conversion
+  27          unsigned char ADC(unsigned char channel); // analog to digital conversion
+  28          
+  29          void delay(char x);// delay function
+  30          void seg_disp(char seconds, char minutes); // display to the 7 segment
+  31            
+  32          void main()
+  33          {
+  34   1        unsigned char num = 0;
+  35   1        unsigned char flag = 0;
+  36   1        unsigned char count = 0;
+  37   1        unsigned char channel = 0;
+  38   1        num = ADC(channel);
+  39   1        while(1)
+  40   1        {
+  41   2          count ++;
+  42   2          if(count>=100)
+  43   2          {
+  44   3              num = ADC(channel); 
+  45   3          }
+  46   2            
+  47   2          seg_disp(num,0);
+  48   2        }
+  49   1      }
+  50          void iic_start()
+  51          {
+  52   1        
+  53   1        Scl = 1;
+  54   1        _nop_();
+C51 COMPILER V9.60.0.0   ANALOG_TO_DIGITAL                                                 07/22/2020 23:26:12 PAGE 2   
+
+  55   1        Sda = 1;
+  56   1        _nop_();
+  57   1        Sda = 0;
+  58   1        
+  59   1      }
+  60          void iic_send(unsigned char _data)
+  61          {
+  62   1        char oneByte = 8;
+  63   1        char temp = 0x80; // 1000 0000
+  64   1        //1000 0000
+  65   1        //0XXX XXXX
+  66   1        //1XXX XXXX
+  67   1        
+  68   1        while(oneByte)
+  69   1        {
+  70   2          Scl = 0;   // added new line 1
+  71   2          if((temp&_data)==0)
+  72   2          //if(temp&_data==0) // changed this line 
+  73   2          {
+  74   3            Sda = 0;
+  75   3          }
+  76   2          else
+  77   2          {
+  78   3            Sda = 1;
+  79   3          }
+  80   2          Scl = 0;
+  81   2          _nop_();
+  82   2          Scl = 1;
+  83   2          _nop_();  // added new line 2
+  84   2          Scl = 0;  // added new line 3
+  85   2          
+  86   2          _data = _data<<1;
+  87   2          oneByte--;
+  88   2        }
+  89   1        
+  90   1      }
+  91          
+  92          unsigned char iic_read()
+  93          {
+  94   1           unsigned char check = 0x80;
+  95   1           unsigned char read = 0;
+  96   1           unsigned char bitCount=8;
+  97   1      
+  98   1           Sda=1;
+  99   1           while(bitCount)
+ 100   1           {
+ 101   2            Scl=0;
+ 102   2                _nop_();
+ 103   2            Scl=1;
+ 104   2            _nop_();
+ 105   2            if(Sda==1)
+ 106   2            {
+ 107   3              read = read|check;
+ 108   3            }
+ 109   2            check = check>>1;
+ 110   2            bitCount--;
+ 111   2          }
+ 112   1          return(read);
+ 113   1      }
+ 114          
+ 115          void iic_ack()
+ 116          {
+C51 COMPILER V9.60.0.0   ANALOG_TO_DIGITAL                                                 07/22/2020 23:26:12 PAGE 3   
+
+ 117   1        Sda = 0;
+ 118   1        Scl = 0;
+ 119   1        _nop_();
+ 120   1        Scl = 1;
+ 121   1        _nop_();
+ 122   1        Scl = 0;
+ 123   1        
+ 124   1      }
+ 125          void iic_noAck()
+ 126          {
+ 127   1        Scl = 0;
+ 128   1        Sda = 1;
+ 129   1        _nop_();
+ 130   1        Scl = 1;
+ 131   1        _nop_();
+ 132   1        Scl = 0;
+ 133   1        
+ 134   1      }
+ 135          void iic_stop()
+ 136          {
+ 137   1        Scl = 1;
+ 138   1        _nop_();
+ 139   1        Sda = 0;
+ 140   1        _nop_();
+ 141   1        Sda = 1;
+ 142   1        
+ 143   1      }
+ 144          
+ 145          void myDAC(unsigned char _byte)
+ 146          {
+ 147   1        iic_start();
+ 148   1        iic_send(0x90); // write to D/A convertor
+ 149   1        iic_ack();
+ 150   1        iic_send(0x40); //enable analog out
+ 151   1        iic_ack();
+ 152   1        iic_send(_byte); // send data
+ 153   1        iic_ack();
+ 154   1        iic_stop();
+ 155   1      } 
+ 156            
+ 157          
+ 158          
+ 159          void delay(unsigned char x)// delay function
+ 160          {
+ 161   1        char y;
+ 162   1        while(x--)
+ 163   1          for(y =0; y<120; y++);
+ 164   1      }
+ 165          
+ 166          
+ 167          void seg_disp(unsigned char seconds, unsigned char minutes) // display to the 7 segment
+ 168          {
+ 169   1            char tens, ones;
+ 170   1            char mtens, mones;
+ 171   1            char t = 1; 
+ 172   1        
+ 173   1            tens = seconds/50;
+ 174   1            ones = (seconds%50)/10;
+ 175   1        
+ 176   1            mtens = minutes/10;
+ 177   1            mones = minutes%10;
+ 178   1        
+C51 COMPILER V9.60.0.0   ANALOG_TO_DIGITAL                                                 07/22/2020 23:26:12 PAGE 4   
+
+ 179   1            //seconds
+ 180   1            P0 = segment[5];
+ 181   1            selectionLatch = 1;
+ 182   1            selectionLatch = 0;
+ 183   1            
+ 184   1            P0 = segData[ones]; 
+ 185   1            dataLatch = 1;
+ 186   1            dataLatch = 0;
+ 187   1            delay(t);
+ 188   1            P0 = segment[4];
+ 189   1            selectionLatch = 1;
+ 190   1            selectionLatch = 0;
+ 191   1        
+ 192   1            P0 = segData[tens]|0x80; 
+ 193   1            dataLatch = 1;
+ 194   1            dataLatch = 0;
+ 195   1            delay(t);
+ 196   1            // minutes
+ 197   1            /*
+ 198   1            P0 = segment[3];
+ 199   1            selectionLatch = 1;
+ 200   1            selectionLatch = 0;
+ 201   1            
+ 202   1            P0 = segData[mones]; 
+ 203   1            dataLatch = 1;
+ 204   1            dataLatch = 0;
+ 205   1            delay(t);
+ 206   1            P0 = segment[2];
+ 207   1            selectionLatch = 1;
+ 208   1            selectionLatch = 0;
+ 209   1        
+ 210   1            P0 = segData[mtens]; 
+ 211   1            dataLatch = 1;
+ 212   1            dataLatch = 0;
+ 213   1            delay(t);
+ 214   1            */
+ 215   1      }
+ 216          
+ 217          unsigned char ADC(unsigned char channel)
+ 218          {
+ 219   1        char readData;
+ 220   1        iic_start();
+ 221   1        iic_send(0x90); // write to D/A convertor
+ 222   1        iic_ack();
+ 223   1        iic_send(0x40|channel); //enable analog out and read from channel
+ 224   1        iic_ack();
+ 225   1        
+ 226   1        iic_start();
+ 227   1        iic_send(0x91); // send read address
+ 228   1        iic_ack();
+ 229   1        readData = iic_read();
+ 230   1        iic_noAck();
+ 231   1        iic_stop();
+ 232   1        return readData;
+ 233   1      } 
+ 234          
+ 235            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    358    ----
+   CONSTANT SIZE    =     16    ----
+C51 COMPILER V9.60.0.0   ANALOG_TO_DIGITAL                                                 07/22/2020 23:26:12 PAGE 5   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

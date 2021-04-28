@@ -1,0 +1,166 @@
+C51 COMPILER V9.60.0.0   UART_SEND_INTERR                                                  07/24/2020 02:18:43 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART_SEND_INTERR
+OBJECT MODULE PLACED IN .\Objects\uart_send_interr.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE uart_send_interr.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\uart_send_interr.lst) TABS(2) OBJECT(.\Objects\uart_send_interr.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<string.h>
+   3          
+   4          #define uchar unsigned char
+   5            
+   6          char code myMSG[] = 
+   7          {
+   8          "program file begins here\n"
+   9          "#include<reg52.h>\n"
+  10          "#include<string.h>  \n"
+  11          "  \n"
+  12          "#define uchar unsigned char\n"
+  13          "  \n"
+  14          "char code myMSG[] = {\"The world is a beautiful place\n\"};\n"         
+  15          "  \n"
+  16          "  \n"
+  17          "void delay(uchar x);\n"
+  18          "void uart_init();\n"
+  19          "  \n"
+  20          "  \n"
+  21          "bit txFlag = 1;  \n"
+  22          "  \n"
+  23          "void main()  \n"
+  24          "{ \n"
+  25          " unsigned int i = 0;\n"
+  26          " uart_init();\n"
+  27          "  \n"
+  28          " while(1)\n"
+  29          " {\n"
+  30          "         \n"
+  31          "         \n"
+  32          "     if(txFlag)  \n"
+  33          "     {   \n"
+  34          "       txFlag = 0;  \n"
+  35          "       SBUF = myMSG[i];    \n"
+  36          "       i++;  \n"
+  37          "       if(i==strlen(myMSG))\n"
+  38          "       { \n"
+  39          "         i  = 0; \n"
+  40          "       } \n"
+  41          "       delay(10);\n"
+  42          "     }   \n"
+  43          "  \n"
+  44          "         \n"
+  45          "         \n"
+  46          " }\n"
+  47          "} \n"
+  48          "  \n"
+  49          "void delay(uchar x) \n"
+  50          "{ \n"
+  51          " uchar y;\n"
+  52          " while(x--)  \n"
+  53          "   for(y = 0; y<120; y++); \n"
+  54          "} \n"
+C51 COMPILER V9.60.0.0   UART_SEND_INTERR                                                  07/24/2020 02:18:43 PAGE 2   
+
+  55          "void uart_init() \n"
+  56          "{ \n"
+  57          " // initialize timer 1 in mode 2(8 bit auto reload)  \n"
+  58          " TMOD = 0x20;\n"
+  59          " TH1 = 0xfd; \n"
+  60          " SCON = 0x50;\n"
+  61          " TR1 = 1;\n"
+  62          " TI =  0;\n"
+  63          " //using inteerrupt \n"
+  64          " EA = 1; // allow all interrupts   \n"
+  65          " ES = 1; // enable serial interrupt\n"
+  66          "  \n"
+  67          "} \n"
+  68          "  \n"
+  69          "  \n"
+  70          "void serial_ISR() interrupt 4  \n"
+  71          "{ \n"
+  72          " TI = 0; \n"
+  73          " txFlag = 1; \n"
+  74          "  \n"
+  75          "} \n"
+  76          "  \n"
+  77          "program file ends here \n\n\n\n\n"
+  78          };                                                              
+  79          
+  80          
+  81          void delay(uchar x);
+  82          void uart_init();
+  83          
+  84          
+  85          bit txFlag = 1;
+  86          
+  87          void main()
+  88          {
+  89   1        unsigned int i = 0;
+  90   1        uart_init();
+  91   1        
+  92   1        while(1)
+  93   1        {
+  94   2          
+  95   2            if(txFlag)
+  96   2            {
+  97   3              txFlag = 0;
+  98   3              SBUF = myMSG[i];
+  99   3              i++;
+ 100   3              if(i==strlen(myMSG))
+ 101   3              {
+ 102   4                i  = 0;
+ 103   4              }
+ 104   3            }
+ 105   2        
+ 106   2          
+ 107   2          
+ 108   2        }
+ 109   1      }
+ 110          
+ 111          void delay(uchar x)
+ 112          {
+ 113   1        uchar y;
+ 114   1        while(x--)
+ 115   1          for(y = 0; y<120; y++);
+ 116   1      }
+C51 COMPILER V9.60.0.0   UART_SEND_INTERR                                                  07/24/2020 02:18:43 PAGE 3   
+
+ 117          void uart_init()
+ 118          {
+ 119   1        PCON = PCON|0x80; //set SMOD to 1 to double the speed of the uart
+ 120   1        // initialize timer 1 in mode 2(8 bit auto reload)
+ 121   1        TMOD = 0x20;
+ 122   1        TH1 = 0xfd;
+ 123   1        SCON = 0x50;
+ 124   1        TR1 = 1;
+ 125   1        TI =  0;
+ 126   1        //using interrupt
+ 127   1        EA = 1; // allow all interrupts
+ 128   1        ES = 1; // enable serial interrupt
+ 129   1        
+ 130   1      }
+ 131          
+ 132          
+ 133          void serial_ISR() interrupt 4
+ 134          {
+ 135   1        TI = 0;
+ 136   1        txFlag = 1;
+ 137   1        
+ 138   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    109    ----
+   CONSTANT SIZE    =    914    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

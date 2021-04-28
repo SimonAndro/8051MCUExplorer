@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\seven_seg.obj" 
+TO ".\Objects\led_matrix" 
+PRINT(".\Listings\led_matrix.m51") RAMSIZE(256) 

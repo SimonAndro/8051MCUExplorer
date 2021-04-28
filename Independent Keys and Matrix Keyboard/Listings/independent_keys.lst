@@ -1,0 +1,51 @@
+C51 COMPILER V9.60.0.0   INDEPENDENT_KEYS                                                  07/19/2020 14:49:29 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE INDEPENDENT_KEYS
+OBJECT MODULE PLACED IN .\Objects\independent_keys.obj
+COMPILER INVOKED BY: F:\Keil\C51\BIN\C51.EXE independent_keys.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\independent_keys.lst) TABS(2) OBJECT(.\Objects\independent_keys.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          sbit key1 = P3^4;
+   4          
+   5          void delay(char x); // delay function
+   6          void main()
+   7          {
+   8   1      
+   9   1        while(1)
+  10   1        {
+  11   2          if(key1==0)
+  12   2          {
+  13   3            delay(20);
+  14   3            if(key1==0)
+  15   3            {
+  16   4              P1=0;
+  17   4            }
+  18   3          }
+  19   2        }
+  20   1      }
+  21          
+  22          void delay(char x) // delay function
+  23          {
+  24   1        char y;
+  25   1        while(x--)
+  26   1          for(y=0; y<120; y++);
+  27   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     45    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

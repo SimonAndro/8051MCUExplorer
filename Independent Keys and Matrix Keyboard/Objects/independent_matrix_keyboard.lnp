@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\matrix_keys.obj" 
+TO ".\Objects\independent_matrix_keyboard" 
+PRINT(".\Listings\independent_matrix_keyboard.m51") RAMSIZE(256) 
